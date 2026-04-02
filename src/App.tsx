@@ -1,6 +1,5 @@
-import Footer from "./components/Footer";
-import Navbar from "./components/navbar";
-import About from "./pages/About";
+import Layout from "./components/Layout";
+// import About from "./pages/About";
 import Home from "./pages/Home"
 
 
@@ -8,12 +7,10 @@ function App() {
 
 
   return (
-    <>
-    <Navbar />
+    <Layout>
    <Home />
-   <About />
-   <Footer />
-    </>
+   {/* <About /> */}
+    </Layout>
    
   );
 }
