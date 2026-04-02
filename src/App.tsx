@@ -1,13 +1,14 @@
-
+import About from "./pages/About";
 
 function App() {
 
 
   return (
     <>
-     <h1 className=''>welcome</h1>
+    <About />
     </>
-  )
+   
+  );
 }
 
 export default App
