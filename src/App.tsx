@@ -1,11 +1,16 @@
+import Navbar from "./components/navbar";
 import About from "./pages/About";
+import Home from "./pages/Home"
+
 
 function App() {
 
 
   return (
     <>
-    <About />
+    <Navbar />
+   <Home />
+   <About />
     </>
    
   );
