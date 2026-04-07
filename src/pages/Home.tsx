@@ -58,14 +58,14 @@ const Home = () => {
 
           <div className="p-6 bg-white rounded-xl shadow">
             <p className="mb-3">
-              "خدمة ممتازة وتعامل راقي، أنصح الجميع!"
+              "صلي على صعسلم"
             </p>
             <span className="font-semibold">- أحمد</span>
           </div>
 
           <div className="p-6 bg-white rounded-xl shadow">
             <p className="mb-3">
-              "أفضل مركز أسنان جربته، النتائج رائعة"
+              "هات 5 جنيه يا عمم خخخخ"
             </p>
             <span className="font-semibold">- سارة</span>
           </div>

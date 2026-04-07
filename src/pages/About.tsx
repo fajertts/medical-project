@@ -11,12 +11,14 @@ const About = () => {
 
       {/* المحتوى */}
       <div className="relative z-10 p-6">
-        <h1 className="text-5xl font-bold  text-black py-8">
-          who we are and what we do
+        <h1 className="text-5xl font-bold  text-black py-20 ">
+          من نحن و ماذا نفعل؟
         </h1>
 
-        <p className="text-xl  text-black py-8">
-          We are a medical center dedicated to providing high-quality healthcare services...
+        <p className="text-2xl font-bold text-black py-20">
+         
+          نحن مركز طبي متخصص في طب الأسنان، نقدم خدمات شاملة للحفاظ على صحة فمك وابتسامتك. فريقنا من الأطباء ذوي الخبرة يستخدم أحدث التقنيات لتوفير رعاية عالية الجودة في بيئة مريحة وآمنة.
+           هدفنا هو تحسين صحة فمك وتعزيز ثقتك بابتسامتك.
         </p>
       </div>
 
