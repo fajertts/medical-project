@@ -1,12 +1,9 @@
-import  {type ReactNode } from "react";
 import Navbar from "./navbar";
 import Footer from "./Footer";
+import { Outlet } from "react-router";
 
-interface LayoutProps {
-  children: ReactNode;
-}
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = () => {
   return (
     <div>
 
@@ -15,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
 
       {/* Main Content */}
       <main className="flex-grow">
-        {children}
+       <Outlet />
       </main>
 
       {/* Footer */}

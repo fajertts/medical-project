@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -28,11 +29,11 @@ const Navbar = () => {
 
         {/* Links */}
         <ul className="hidden md:flex gap-8 font-medium">
-          <li className="cursor-pointer hover:text-blue-500 transition"><a href="#Home">Home</a> </li>
-          <li className="cursor-pointer hover:text-blue-500 transition"><a href="#About">About</a></li>
-          <li className="cursor-pointer hover:text-blue-500 transition"><a href="#Services">Services</a></li>
-          <li className="cursor-pointer hover:text-blue-500 transition"><a href="#Doctors">Doctors</a></li>
-          <li className="cursor-pointer hover:text-blue-500 transition"><a href="#Contact">Contact</a></li>
+          <li className="cursor-pointer hover:text-blue-500 transition"><Link to="/Home">Home</Link></li>
+          <li className="cursor-pointer hover:text-blue-500 transition"><Link to="/About">About</Link></li>
+          <li className="cursor-pointer hover:text-blue-500 transition"><Link to="/Services">Services</Link></li>
+          <li className="cursor-pointer hover:text-blue-500 transition"><Link to="/Doctors">Doctors</Link></li>
+          <li className="cursor-pointer hover:text-blue-500 transition"><Link to="/Contact">Contact</Link></li>
         </ul>
 
        
