@@ -1,6 +1,7 @@
 
 const Home = () => {
   return (
+    <div dir="rtl">
     <div className="bg-white text-gray-800">
 
       {/* 🔵 Hero Section */}
@@ -84,6 +85,7 @@ const Home = () => {
       </section>
 
     </div>
+</div>
   );
 };
 

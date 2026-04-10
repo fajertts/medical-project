@@ -2,6 +2,7 @@
 
 const Footer = () => {
   return (
+    <div dir="rtl">
     <footer className="bg-blue-900 text-white pt-12 pb-6">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-8">
 
@@ -50,6 +51,7 @@ const Footer = () => {
         © 2026 SmileCare - جميع الحقوق محفوظة
       </div>
     </footer>
+    </div>
   );
 };
 

@@ -1,6 +1,7 @@
 const About = () => {
   return (
-    <section className="relative flex min-h-screen">
+     <div dir="rtl">
+      <section className="relative flex min-h-screen">
       
       <div className=" absolute inset-0 bg-[url('https://wallpapers.com/images/hd/dentist-s-dental-tools-hf5tfhuaco0o9msr.jpg')] bg-cover bg-center">
         
@@ -23,6 +24,7 @@ const About = () => {
       </div>
 
     </section>
+    </div>
   )
 }
 export default About;
