@@ -15,7 +15,7 @@ const Contact = () => {
         </div>
 
         {/* Form */}
-        <form className="bg-white p-8 rounded-2xl shadow-xl space-y-6">
+        <form className="bg-white p-8 rounded-2xl shadow-xl space-y-6 ">
           
           {/* Email */}
           <div>
