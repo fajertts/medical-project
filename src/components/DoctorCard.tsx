@@ -1,35 +1,35 @@
-interface Doctor {
-  name: string;
-  specialty: string;
-  experience: string;
-  image: string;
+import type { Doctor } from "../types/doctor";
+
+interface Props {
+  doctor?: Doctor;
 }
 
-const DoctorCard = ({ name, specialty, experience, image }: Doctor) => {
+export default function DoctorCard({
+  doctor,
+}: Props) {
+  if (!doctor) return null;
+
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+    <div className="rounded-3xl bg-white shadow-lg p-6">
 
-      {/* Image */}
-      <div className="h-64 overflow-hidden">
-        <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover hover:scale-110 transition duration-300"
-        />
-      </div>
+      <img
+        src={doctor.image}
+        alt={doctor.name}
+        className="w-48 h-48 rounded-full object-cover mx-auto"
+      />
 
-      {/* Content */}
-      <div className="p-5 text-center">
-        <h2 className="text-xl font-bold text-gray-800">{name}</h2>
-        <p className="text-blue-600 font-medium">{specialty}</p>
-        <p className="text-gray-500 text-sm mt-2">{experience}</p>
+      <h2 className="text-center text-2xl font-bold mt-5">
 
-        <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition cursor-pointer">
-          احجز موعد
-        </button>
-      </div>
+        {doctor.name}
+
+      </h2>
+
+      <p className="text-center text-blue-600 mt-2">
+
+        {doctor.specialty}
+
+      </p>
+
     </div>
   );
-};
-
-export default DoctorCard;
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 
 const Home = () => {
   return (
@@ -16,9 +17,12 @@ const Home = () => {
             أفضل خدمات طب الأسنان بأحدث التقنيات
           </p>
 
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition">
-            احجز موعد
-          </button>
+         <Link to="/appointment">
+  <button
+    className="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700">
+    احجز موعد
+  </button>
+</Link>
         </div>
       </section>
 
