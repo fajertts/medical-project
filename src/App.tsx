@@ -17,11 +17,12 @@ import AppointmentForm from "./components/AppointmentForm";
 
 import AdminLogin from "./pages/AdminLogin";
 
-import Dashboard from "./pages/Dashboard";
-import DashboardHome from "./pages/DashboardHome";
-import DashboardDoctors from "./pages/DashboardDoctors";
-// import DashboardServices from "./pages/DashboardServices";
-// import DashboardAppointments from "./pages/DashboardAppointments";
+import Dashboard from "./pages/Dashboard/DashboardServices";
+import DashboardHome from "./pages/Dashboard/DashboardHome";
+import DashboardDoctors from "./pages/Dashboard/DashboardDoctors";
+import DashboardLayout from "./layouts/DashboardLayout";
+import DashboardServices from "./pages/Dashboard/DashboardServices";
+import DashboardAppointments from "./pages/Dashboard/DashboardAppointments";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -39,33 +40,22 @@ const router = createBrowserRouter(
       </Route>
 
       {/* لوحة التحكم */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<DashboardHome />} />
+  <Route 
+  path="/dashboard" 
+  element={
+    <ProtectedRoute>
+      <DashboardLayout />
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<DashboardHome />} />
+  <Route path="doctors" element={<DashboardDoctors />} />
+  <Route path="services" element={<DashboardServices />} />
+  <Route path="appointments" element={<DashboardAppointments />} />
+</Route>
 
-        <Route
-          path="doctors"
-          element={<DashboardDoctors />}
-        />
-
-        {/* <Route
-          path="services"
-          element={<DashboardServices />}
-        />
-
-        <Route
-          path="appointments"
-          element={<DashboardAppointments />}
-        /> */}
-      </Route>
-    </>
-  )
+    </>,
+  ),
 );
 function App() {
   return <RouterProvider router={router} />;

@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
-import { createAppointment } from "../services/appiontmentservice";
+import { createAppointment,getAvailableTimes } from "../services/appiontmentservice";
+
+// ADD APPOINTMENT
 export const addAppointment = async (
   req: Request,
   res: Response
-): Promise<void> => {
+) => {
   try {
     const {
       patient_name,
-      phone,
+      patient_phone,
       doctor_id,
       service_id,
       appointment_date,
@@ -16,29 +18,41 @@ export const addAppointment = async (
 
     const appointment = await createAppointment(
       patient_name,
-      phone,
-      Number(doctor_id),
-      Number(service_id),
+      patient_phone,
+      doctor_id,
+      service_id,
       appointment_date,
       appointment_time
     );
 
-    res.status(201).json({
-      message: "Appointment booked successfully",
-      appointment,
-    });
+    res.status(201).json(appointment);
   } catch (error: any) {
-    if (error.message === "Appointment already booked") {
-      res.status(409).json({
-        message: error.message,
-      });
-      return;
-    }
-
     console.error(error);
 
     res.status(500).json({
-      message: "Internal Server Error",
+      message: error.message,
+    });
+  }
+};
+export const availableTimes = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const doctorId = Number(req.query.doctorId);
+    const date = req.query.date as string;
+
+    const times = await getAvailableTimes(
+      doctorId,
+      date
+    );
+
+    res.status(200).json(times);
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
     });
   }
 };

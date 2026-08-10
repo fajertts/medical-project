@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { addAppointment } from "../controllers/appointmentcontroller";
-import { availableTimes } from "../controllers/serviceController";
+import {
+  addAppointment,
+  availableTimes,
+} from "../controllers/appointmentcontroller";
 
 const router = Router();
+
 router.get("/available", availableTimes);
 router.post("/", addAppointment);
 

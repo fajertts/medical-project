@@ -6,8 +6,6 @@ export interface Doctor {
   name: string;
   specialization: string;
   image: string;
-  days: string[];
-  times: string[];
 }
 
 const getDoctors = async (): Promise<Doctor[]> => {

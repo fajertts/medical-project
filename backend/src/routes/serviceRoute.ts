@@ -1,17 +1,31 @@
 import { Router } from "express";
-import { getService, getServices } from "../controllers/serviceController";
-import { addService } from "../controllers/serviceController";
-import { editService } from "../controllers/serviceController";
-import { delService } from "../controllers/serviceController";
+import {
+  getServices,
+  getServiceById,
+  addService,
+  updateService,
+  deleteService,
+} from "../controllers/serviceController";
 
+import { verifyToken } from "../middleware/authMiddleWare";
+import { upload } from "../middleware/upload";
 
 const router = Router();
 
-
+// Public
 router.get("/", getServices);
-router.post("/", addService);
-router.get("/:id", getService);
-router.put("/:id", editService);
-router.delete("/:id", delService);
+router.get("/:id", getServiceById);
+
+// Admin
+router.post("/", verifyToken, upload.single("image"), addService);
+
+router.put(
+  "/:id",
+  verifyToken,
+  upload.single("image"),
+  updateService
+);
+
+router.delete("/:id", verifyToken, deleteService);
 
 export default router;

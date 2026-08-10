@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
-export const useAddDoctor = () => {
+export const useAddService = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -9,7 +9,7 @@ export const useAddDoctor = () => {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/doctors",
+        "http://localhost:3000/api/services",
         formData,
         {
           headers: {
@@ -24,17 +24,8 @@ export const useAddDoctor = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["doctors"],
+        queryKey: ["services"],
       });
-    },
-
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        console.log("Status:", error.response?.status);
-        console.log("Response:", error.response?.data);
-      } else {
-        console.log(error);
-      }
     },
   });
 };

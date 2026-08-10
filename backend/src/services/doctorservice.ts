@@ -11,14 +11,12 @@ export const createDoctor = async (
   name: string,
   specialization: string,
   image: string
-
 ) => {
   const result = await pool.query(
     `
-    INSERT INTO doctors
-    (name, specialization,  image )
+    INSERT INTO doctors (name, specialization, image)
     VALUES ($1, $2, $3)
-    RETURNING *
+    RETURNING *;
     `,
     [name, specialization, image]
   );
@@ -31,8 +29,7 @@ export const updateDoctorById = async (
   id: number,
   name: string,
   specialization: string,
-  image: string,
-  
+  image: string
 ) => {
   const result = await pool.query(
     `
@@ -40,11 +37,11 @@ export const updateDoctorById = async (
     SET
       name = $1,
       specialization = $2,
-      image = $4
-    WHERE id = $5
-    RETURNING *
+      image = $3
+    WHERE id = $4
+    RETURNING *;
     `,
-    [name, specialization,  image, id]
+    [name, specialization, image, id]
   );
 
   return result.rows[0];
