@@ -1,6 +1,9 @@
 import pool from "../config/db";
 
-// GET
+// ==========================================
+// GET ALL SERVICES
+// ==========================================
+
 export const getAllServices = async () => {
   const result = await pool.query(
     "SELECT * FROM services ORDER BY id ASC"
@@ -9,8 +12,13 @@ export const getAllServices = async () => {
   return result.rows;
 };
 
+// ==========================================
 // GET SERVICE BY ID
-export const getServiceByIdService = async (id: number) => {
+// ==========================================
+
+export const getServiceByIdService = async (
+  id: number
+) => {
   const result = await pool.query(
     "SELECT * FROM services WHERE id = $1",
     [id]
@@ -19,7 +27,10 @@ export const getServiceByIdService = async (id: number) => {
   return result.rows[0];
 };
 
-// CREATE
+// ==========================================
+// CREATE SERVICE
+// ==========================================
+
 export const createService = async (
   title: string,
   description: string,
@@ -29,7 +40,7 @@ export const createService = async (
     `
       INSERT INTO services
       (title, description, image)
-      VALUES ($1,$2,$3)
+      VALUES ($1, $2, $3)
       RETURNING *
     `,
     [title, description, image]
@@ -38,7 +49,10 @@ export const createService = async (
   return result.rows[0];
 };
 
-// UPDATE
+// ==========================================
+// UPDATE SERVICE
+// ==========================================
+
 export const updateServiceById = async (
   id: number,
   title: string,
@@ -49,22 +63,32 @@ export const updateServiceById = async (
     `
       UPDATE services
       SET
-        title=$1,
-        description=$2,
-        image=$3
-      WHERE id=$4
+        title = $1,
+        description = $2,
+        image = $3
+      WHERE id = $4
       RETURNING *
     `,
-    [title, description, image, id]
+    [
+      title,
+      description,
+      image,
+      id,
+    ]
   );
 
   return result.rows[0];
 };
 
-// DELETE
-export const deleteServiceById = async (id: number) => {
+// ==========================================
+// DELETE SERVICE
+// ==========================================
+
+export const deleteServiceById = async (
+  id: number
+) => {
   await pool.query(
-    "DELETE FROM services WHERE id=$1",
+    "DELETE FROM services WHERE id = $1",
     [id]
   );
 };

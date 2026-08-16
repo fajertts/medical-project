@@ -13,7 +13,7 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import DoctorsSection from "./pages/Doctors";
 import Contact from "./pages/Contact";
-import AppointmentForm from "./components/AppointmentForm";
+import AppointmentForm from "./components/appointments/AppointmentForm";
 
 import AdminLogin from "./pages/AdminLogin";
 
@@ -40,18 +40,33 @@ const router = createBrowserRouter(
       </Route>
 
       {/* لوحة التحكم */}
-  <Route 
-  path="/dashboard" 
+  <Route
+  path="/dashboard"
   element={
     <ProtectedRoute>
       <DashboardLayout />
     </ProtectedRoute>
   }
 >
-  <Route index element={<DashboardHome />} />
-  <Route path="doctors" element={<DashboardDoctors />} />
-  <Route path="services" element={<DashboardServices />} />
-  <Route path="appointments" element={<DashboardAppointments />} />
+  <Route
+    index
+    element={<DashboardHome />}
+  />
+
+  <Route
+    path="doctors"
+    element={<DashboardDoctors />}
+  />
+
+  <Route
+    path="services"
+    element={<DashboardServices />}
+  />
+
+  <Route
+    path="appointments"
+    element={<DashboardAppointments />}
+  />
 </Route>
 
     </>,

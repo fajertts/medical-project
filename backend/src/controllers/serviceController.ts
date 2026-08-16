@@ -8,7 +8,10 @@ import {
   getServiceByIdService,
 } from "../services/serviceService";
 
+// ==========================================
 // GET ALL SERVICES
+// ==========================================
+
 export const getServices = async (
   req: Request,
   res: Response
@@ -18,7 +21,7 @@ export const getServices = async (
 
     res.status(200).json(services);
   } catch (error) {
-    console.error(error);
+    console.error("GET SERVICES ERROR:", error);
 
     res.status(500).json({
       message: "Internal Server Error",
@@ -26,7 +29,10 @@ export const getServices = async (
   }
 };
 
+// ==========================================
 // GET SERVICE BY ID
+// ==========================================
+
 export const getServiceById = async (
   req: Request,
   res: Response
@@ -34,7 +40,9 @@ export const getServiceById = async (
   try {
     const { id } = req.params;
 
-    const service = await getServiceByIdService(Number(id));
+    const service = await getServiceByIdService(
+      Number(id)
+    );
 
     if (!service) {
       return res.status(404).json({
@@ -44,7 +52,10 @@ export const getServiceById = async (
 
     res.status(200).json(service);
   } catch (error: any) {
-    console.error(error);
+    console.error(
+      "GET SERVICE BY ID ERROR:",
+      error
+    );
 
     res.status(500).json({
       message: error.message,
@@ -52,13 +63,19 @@ export const getServiceById = async (
   }
 };
 
+// ==========================================
 // ADD SERVICE
+// ==========================================
+
 export const addService = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const { title, description } = req.body;
+    const {
+      title,
+      description,
+    } = req.body;
 
     const image = req.file
       ? `http://localhost:3000/uploads/services/${req.file.filename}`
@@ -72,7 +89,10 @@ export const addService = async (
 
     res.status(201).json(service);
   } catch (error: any) {
-    console.error(error);
+    console.error(
+      "ADD SERVICE ERROR:",
+      error
+    );
 
     res.status(500).json({
       message: error.message,
@@ -80,7 +100,10 @@ export const addService = async (
   }
 };
 
+// ==========================================
 // UPDATE SERVICE
+// ==========================================
+
 export const updateService = async (
   req: Request,
   res: Response
@@ -88,11 +111,27 @@ export const updateService = async (
   try {
     const { id } = req.params;
 
-    const { title, description } = req.body;
+    const {
+      title,
+      description,
+    } = req.body;
+
+    // أولاً نجلب الخدمة القديمة
+    const existingService =
+      await getServiceByIdService(Number(id));
+
+    if (!existingService) {
+      return res.status(404).json({
+        message: "Service Not Found",
+      });
+    }
+
+    // إذا تم رفع صورة جديدة نستخدمها
+    // وإذا لم يتم رفع صورة نحتفظ بالقديمة
 
     const image = req.file
       ? `http://localhost:3000/uploads/services/${req.file.filename}`
-      : req.body.image;
+      : existingService.image;
 
     const service = await updateServiceById(
       Number(id),
@@ -103,7 +142,10 @@ export const updateService = async (
 
     res.status(200).json(service);
   } catch (error: any) {
-    console.error(error);
+    console.error(
+      "UPDATE SERVICE ERROR:",
+      error
+    );
 
     res.status(500).json({
       message: error.message,
@@ -111,7 +153,10 @@ export const updateService = async (
   }
 };
 
+// ==========================================
 // DELETE SERVICE
+// ==========================================
+
 export const deleteService = async (
   req: Request,
   res: Response
@@ -124,11 +169,14 @@ export const deleteService = async (
     res.status(200).json({
       message: "Service Deleted Successfully",
     });
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error(
+      "DELETE SERVICE ERROR:",
+      error
+    );
 
     res.status(500).json({
-      message: "Internal Server Error",
+      message: error.message,
     });
   }
 };

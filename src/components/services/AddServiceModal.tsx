@@ -36,9 +36,9 @@ const AddServiceModal = ({
 
   useEffect(() => {
     if (service) {
-      setTitle(service.title  "");
-      setDescription(service.description  "");
-      setPreview(service.image  "");
+      setTitle(service.title || "");
+      setDescription(service.description || "");
+      setPreview(service.image || "");
       setImage(null);
     } else {
       setTitle("");
@@ -118,7 +118,7 @@ const AddServiceModal = ({
             );
 
             toast.error(
-              error?.response?.data?.message 
+              error?.response?.data?.message ||
                 "Failed To Update Service"
             );
           },
@@ -164,7 +164,7 @@ const AddServiceModal = ({
         );
 
         toast.error(
-          error?.response?.data?.message 
+          error?.response?.data?.message ||
             "Failed To Add Service"
         );
       },
@@ -172,7 +172,7 @@ const AddServiceModal = ({
   };
 
   const saving =
-    isPending  updateService.isPending;
+    isPending || updateService.isPending;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -191,6 +191,7 @@ const AddServiceModal = ({
                 ? "Edit Service"
                 : "Add New Service"}
             </h2>
+
             <p className="text-sm text-gray-500 mt-1">
               {service
                 ? "Update service information"
@@ -333,6 +334,7 @@ const AddServiceModal = ({
             >
               Cancel
             </button>
+
             <button
               type="submit"
               disabled={saving}

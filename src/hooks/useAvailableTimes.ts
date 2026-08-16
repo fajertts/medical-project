@@ -1,13 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAvailableTimes } from "../api/appointmentApi";
+import axios from "axios";
 
 export const useAvailableTimes = (
-  doctorId: number,
+  doctorId: number | null,
   date: string
 ) => {
   return useQuery({
     queryKey: ["available-times", doctorId, date],
-    queryFn: () => getAvailableTimes(doctorId, date),
-    enabled: doctorId > 0 && date !== "",
+
+    queryFn: async () => {
+      const { data } = await axios.get(
+        "http://localhost:3000/api/appointments/available",
+        {
+          params: {
+            doctorId,
+            date,
+          },
+        }
+      );
+
+      return data as string[];
+    },
+
+    enabled: !!doctorId && !!date,
   });
 };

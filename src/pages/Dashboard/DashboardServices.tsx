@@ -9,58 +9,171 @@ import {
 
 import { useServices } from "../../hooks/useServices";
 import { useDeleteService } from "../../hooks/useDeleteServices";
+
 import AddServiceModal from "../../components/services/AddServiceModal";
+import StatsCards from "../../components/dashboard/StatCard";
+
+type Service = {
+  id: number;
+  title: string;
+  description: string;
+  image?: string;
+};
 
 const DashboardServices = () => {
-  const { data, isLoading, isError } = useServices();
+  const {
+    data,
+    isLoading,
+    isError,
+  } = useServices();
 
   const deleteService = useDeleteService();
 
   const [open, setOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState<any>(null);
+
+  const [selectedService, setSelectedService] =
+    useState<Service | null>(null);
+
   const [search, setSearch] = useState("");
+
+  // ==========================================
+  // SEARCH
+  // ==========================================
 
   const filteredServices = useMemo(() => {
     if (!data) return [];
 
-    return data.filter((service: any) => {
+    const services = data as Service[];
+
+    const searchValue =
+      search.toLowerCase().trim();
+
+    if (!searchValue) {
+      return services;
+    }
+
+    return services.filter((service) => {
       return (
         service.title
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
+          ?.toLowerCase()
+          .includes(searchValue) ||
         service.description
-          .toLowerCase()
-          .includes(search.toLowerCase())
+          ?.toLowerCase()
+          .includes(searchValue)
       );
     });
   }, [data, search]);
 
+  // ==========================================
+  // LOADING
+  // ==========================================
+
   if (isLoading) {
     return (
-      <h1 className="text-center text-2xl mt-20">
-        Loading Services...
-      </h1>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <h1 className="text-2xl font-semibold text-gray-600">
+          Loading Services...
+        </h1>
+      </div>
     );
   }
+
+  // ==========================================
+  // ERROR
+  // ==========================================
 
   if (isError) {
     return (
-      <h1 className="text-center text-red-600 mt-20">
-        Error Loading Services
-      </h1>
+      <div className="flex justify-center items-center min-h-[400px]">
+        <h1 className="text-xl font-semibold text-red-600">
+          Error Loading Services
+        </h1>
+      </div>
     );
   }
 
+  // ==========================================
+  // DELETE
+  // ==========================================
+
+  const handleDelete = (service: Service) => {
+    const confirmDelete = window.confirm(
+      `Delete "${service.title}"?`
+    );
+
+    if (!confirmDelete) return;
+
+    deleteService.mutate(service.id, {
+      onSuccess: () => {
+        toast.success(
+          "Service Deleted Successfully"
+        );
+      },
+
+      onError: (error: any) => {
+        console.error(
+          "DELETE SERVICE ERROR:",
+          error
+        );
+
+        toast.error(
+          error?.response?.data?.message ||
+            "Failed To Delete Service"
+        );
+      },
+    });
+  };
+
+  // ==========================================
+  // ADD
+  // ==========================================
+
+  const handleAdd = () => {
+    setSelectedService(null);
+    setOpen(true);
+  };
+
+  // ==========================================
+  // EDIT
+  // ==========================================
+
+  const handleEdit = (service: Service) => {
+    setSelectedService(service);
+    setOpen(true);
+  };
+
+  // ==========================================
+  // RENDER
+  // ==========================================
+
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-6 lg:p-8">
 
-      {/* Header */}
+      {/* ======================================
+          STATS
+      ====================================== */}
 
-      <div className="flex flex-col lg:flex-row justify-between items-center gap-5 mb-8">
+     
 
-        <h1 className="text-4xl font-bold">
-          Services
-        </h1>
+      {/* ======================================
+          HEADER
+      ====================================== */}
+
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-8">
+
+        {/* TITLE */}
+
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Services
+          </h1>
+
+          <p className="text-gray-500 mt-1">
+            Manage SmileCare services
+          </p>
+        </div>
+
+        {/* SEARCH */}
 
         <div className="relative w-full lg:w-96">
 
@@ -71,21 +184,21 @@ const DashboardServices = () => {
 
           <input
             type="text"
-            placeholder="Search Service..."
+            placeholder="Search service..."
             value={search}
             onChange={(e) =>
               setSearch(e.target.value)
             }
-            className="w-full border rounded-xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-300 rounded-xl pl-12 pr-4 py-3 outline-none transition focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+
         </div>
 
+        {/* ADD BUTTON */}
+
         <button
-          onClick={() => {
-            setSelectedService(null);
-            setOpen(true);
-          }}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl transition"
+          onClick={handleAdd}
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl transition shadow-sm"
         >
           <Plus size={20} />
 
@@ -94,119 +207,183 @@ const DashboardServices = () => {
 
       </div>
 
-      {/* Table */}
+      {/* ======================================
+          TABLE
+      ====================================== */}
 
       <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 
-        <table className="w-full">
+        {/* TABLE HEADER */}
 
-          <thead className="bg-gray-100">
+        <div className="px-6 py-4 border-b flex justify-between items-center">
 
-            <tr>
+          <div>
+            <h2 className="text-lg font-bold text-gray-800">
+              All Services
+            </h2>
 
-              <th className="p-5 text-left">
-                Image
-              </th>
+            <p className="text-sm text-gray-500">
+              {filteredServices.length} services found
+            </p>
+          </div>
 
-              <th className="text-left">
-                Title
-              </th>
+        </div>
 
-              <th className="text-left">
-                Description
-              </th>
+        {/* DESKTOP TABLE */}
 
-              <th className="text-center">
-                Actions
-              </th>
+        <div className="overflow-x-auto">
 
-            </tr>
+          <table className="w-full min-w-[800px]">
 
-          </thead>
+            <thead className="bg-gray-100">
 
-          <tbody>
+              <tr>
 
-            {filteredServices.map(
-              (service: any) => (
+                <th className="p-5 text-left">
+                  Image
+                </th>
 
-                <tr
-                  key={service.id}
-                  className="border-t hover:bg-gray-50"
-                >
+                <th className="text-left">
+                  Title
+                </th>
 
-                  <td className="p-4">
+                <th className="text-left">
+                  Description
+                </th>
 
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="w-16 h-16 rounded-xl object-cover"
-                    />
+                <th className="text-center">
+                  Actions
+                </th>
 
-                  </td>
+              </tr>
 
-                  <td className="font-semibold">
-                    {service.title}
-                  </td>
+            </thead>
 
-                  <td className="max-w-md">
-                    {service.description}
-                  </td>
+            <tbody>
 
-                  <td className="text-center">
+              {filteredServices.length > 0 ? (
+                filteredServices.map(
+                  (service) => (
+                    <tr
+                      key={service.id}
+                      className="border-t hover:bg-gray-50 transition"
+                    >
 
-                    <div className="flex justify-center gap-3">
+                      {/* IMAGE */}
 
-                      <button
-                        onClick={() => {
-                          setSelectedService(service);
-                          setOpen(true);
-                        }}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg"
-                      >
-                        <Pencil size={18} />
-                      </button>
+                      <td className="p-4">
 
-                      <button
-                        onClick={() => {
-                          const confirmDelete =
-                            window.confirm(
-                              `Delete "${service.title}" ?`
-                            );
+                        {service.image ? (
+                          <img
+                            src={service.image}
+                            alt={service.title}
+                            className="w-16 h-16 rounded-xl object-cover border"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                            No Image
+                          </div>
+                        )}
 
-                          if (!confirmDelete) return;
+                      </td>
 
-                          deleteService.mutate(
-                            service.id,
-                            {
-                              onSuccess: () => {
-                                toast.success(
-                                  "Service Deleted Successfully"
-                                );
-                              },
+                      {/* TITLE */}
+
+                      <td className="font-semibold text-gray-800">
+                        {service.title}
+                      </td>
+
+                      {/* DESCRIPTION */}
+
+                      <td className="max-w-md">
+
+                        <p className="text-gray-600 line-clamp-2">
+                          {service.description}
+                        </p>
+
+                      </td>
+
+                      {/* ACTIONS */}
+
+                      <td className="text-center">
+
+                        <div className="flex justify-center gap-3">
+
+                          {/* EDIT */}
+
+                          <button
+                            onClick={() =>
+                              handleEdit(service)
                             }
-                          );
-                        }}
-                        className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg"
-                      >
-                        <Trash2 size={18} />
-                      </button>
+                            title="Edit Service"
+                            className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg transition"
+                          >
+                            <Pencil size={18} />
+                          </button>
+
+                          {/* DELETE */}
+
+                          <button
+                            onClick={() =>
+                              handleDelete(service)
+                            }
+                            title="Delete Service"
+                            disabled={
+                              deleteService.isPending
+                            }
+                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition disabled:opacity-50"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+
+                        </div>
+
+                      </td>
+
+                    </tr>
+                  )
+                )
+              ) : (
+                <tr>
+
+                  <td
+                    colSpan={4}
+                    className="text-center py-16"
+                  >
+
+                    <div className="flex flex-col items-center">
+
+                      <Search
+                        size={40}
+                        className="text-gray-300 mb-3"
+                      />
+
+                      <h3 className="text-lg font-semibold text-gray-500">
+                        No services found
+                      </h3>
+
+                      <p className="text-sm text-gray-400 mt-1">
+                        Try another search
+                      </p>
 
                     </div>
 
                   </td>
 
                 </tr>
+              )}
 
-              )
-            )}
+            </tbody>
 
-          </tbody>
+          </table>
 
-        </table>
+        </div>
 
       </div>
 
-      {/* Modal */}
+      {/* ======================================
+          MODAL
+      ====================================== */}
 
       {open && (
         <AddServiceModal
