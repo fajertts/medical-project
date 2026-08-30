@@ -1,18 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const useServices = () => {
+export const useDoctor = (
+  id: string | undefined
+) => {
   return useQuery({
-    queryKey: ["services"],
+    queryKey: ["doctor", id],
 
     queryFn: async () => {
       const response = await axios.get(
-        "http://localhost:3000/api/services"
+        `http://localhost:3000/api/doctors/${id}`
       );
 
       return response.data;
     },
 
-    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
   });
 };

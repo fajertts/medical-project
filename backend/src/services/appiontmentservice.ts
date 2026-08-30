@@ -1,9 +1,10 @@
 import pool from "../config/db";
-
+import { sendAppointmentConfirmation } from "./emailService";
 // CREATE APPOINTMENT
 export const createAppointment = async (
   patient_name: string,
   phone: string,
+  email: string,
   doctor_id: number,
   service_id: number,
   appointment_date: string,
@@ -29,23 +30,26 @@ export const createAppointment = async (
     throw new Error("Appointment already booked");
   }
 
+  // Create appointment
   const result = await pool.query(
     `
     INSERT INTO appointments
     (
       patient_name,
       phone,
+      email,
       doctor_id,
       service_id,
       appointment_date,
       appointment_time
     )
-    VALUES ($1,$2,$3,$4,$5,$6)
+    VALUES ($1,$2,$3,$4,$5,$6,$7)
     RETURNING *
     `,
     [
       patient_name,
       phone,
+      email,
       doctor_id,
       service_id,
       appointment_date,
@@ -53,9 +57,53 @@ export const createAppointment = async (
     ]
   );
 
-  return result.rows[0];
-};
+  const appointment = result.rows[0];
 
+  // Get doctor and service names
+  const details = await pool.query(
+    `
+    SELECT
+      d.name AS doctor_name,
+      s.title AS service_title
+    FROM doctors d
+    CROSS JOIN services s
+    WHERE d.id = $1
+      AND s.id = $2
+    `,
+    [
+      doctor_id,
+      service_id,
+    ]
+  );
+
+  const doctorName =
+    details.rows[0]?.doctor_name || "Doctor";
+
+  const serviceName =
+    details.rows[0]?.service_title || "Service";
+
+  // Send confirmation email
+ try {
+  await sendAppointmentConfirmation(
+    email,
+    patient_name,
+    doctorName,
+    serviceName,
+    appointment_date,
+    appointment_time
+  );
+
+  console.log("✅ Confirmation email sent successfully");
+
+} catch (emailError) {
+
+  console.error(
+    "⚠️ Appointment created, but email failed:",
+    emailError
+  );
+}
+  return appointment;
+};
 
 // GET ALL APPOINTMENTS
 
@@ -118,6 +166,7 @@ export const updateAppointmentById = async (
   id: number,
   patient_name: string,
   phone: string,
+  email: string,
   doctor_id: number,
   service_id: number,
   appointment_date: string,
@@ -161,18 +210,20 @@ export const updateAppointmentById = async (
     SET
       patient_name = $1,
       phone = $2,
-      doctor_id = $3,
-      service_id = $4,
-      appointment_date = $5,
-      appointment_time = $6
+      email = $3,
+      doctor_id = $4,
+      service_id = $5,
+      appointment_date = $6,
+      appointment_time = $7
 
-    WHERE id = $7
+    WHERE id = $8
 
     RETURNING *
     `,
     [
       patient_name,
       phone,
+      email,
       doctor_id,
       service_id,
       appointment_date,

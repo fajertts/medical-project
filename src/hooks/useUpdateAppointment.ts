@@ -5,6 +5,7 @@ type UpdateAppointmentData = {
   id: number;
   patient_name: string;
   phone: string;
+  email: string;
   doctor_id: number;
   service_id: number;
   appointment_date: string;

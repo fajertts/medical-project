@@ -16,16 +16,35 @@ const EditAppointmentModal = ({
   appointment,
   onClose,
 }: Props) => {
-  const { data: doctors, isLoading: doctorsLoading } =
-    useDoctors();
+  // ==============================
+  // DATA
+  // ==============================
 
-  const { data: services, isLoading: servicesLoading } =
-    useServices();
+  const {
+    data: doctors,
+    isLoading: doctorsLoading,
+  } = useDoctors();
 
-  const updateAppointment = useUpdateAppointment();
+  const {
+    data: services,
+    isLoading: servicesLoading,
+  } = useServices();
 
-  const [patientName, setPatientName] = useState("");
-  const [phone, setPhone] = useState("");
+  const updateAppointment =
+    useUpdateAppointment();
+
+  // ==============================
+  // STATES
+  // ==============================
+
+  const [patientName, setPatientName] =
+    useState("");
+
+  const [phone, setPhone] =
+    useState("");
+
+  const [email, setEmail] =
+    useState("");
 
   const [doctorId, setDoctorId] =
     useState<number | null>(null);
@@ -33,8 +52,15 @@ const EditAppointmentModal = ({
   const [serviceId, setServiceId] =
     useState<number | null>(null);
 
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [date, setDate] =
+    useState("");
+
+  const [time, setTime] =
+    useState("");
+
+  // ==============================
+  // LOAD APPOINTMENT DATA
+  // ==============================
 
   useEffect(() => {
     if (!appointment) return;
@@ -45,6 +71,10 @@ const EditAppointmentModal = ({
 
     setPhone(
       appointment.phone || ""
+    );
+
+    setEmail(
+      appointment.email || ""
     );
 
     setDoctorId(
@@ -76,6 +106,10 @@ const EditAppointmentModal = ({
     );
   }, [appointment]);
 
+  // ==============================
+  // AVAILABLE TIMES
+  // ==============================
+
   const {
     data: availableTimes,
     isLoading: timesLoading,
@@ -83,6 +117,10 @@ const EditAppointmentModal = ({
     doctorId,
     date
   );
+
+  // ==============================
+  // SUBMIT
+  // ==============================
 
   const handleSubmit = (
     e: React.FormEvent<HTMLFormElement>
@@ -92,6 +130,7 @@ const EditAppointmentModal = ({
     if (
       !patientName.trim() ||
       !phone.trim() ||
+      !email.trim() ||
       !doctorId ||
       !serviceId ||
       !date ||
@@ -110,6 +149,7 @@ const EditAppointmentModal = ({
 
         patient_name: patientName,
         phone,
+        email,
 
         doctor_id: doctorId,
         service_id: serviceId,
@@ -139,7 +179,7 @@ const EditAppointmentModal = ({
           } else {
             toast.error(
               error?.response?.data?.message ||
-              "Failed to update appointment"
+                "Failed to update appointment"
             );
           }
         },
@@ -152,7 +192,9 @@ const EditAppointmentModal = ({
 
       <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
 
-        {/* HEADER */}
+        {/* ==============================
+            HEADER
+        ============================== */}
 
         <div className="flex items-center justify-between p-6 border-b">
 
@@ -176,14 +218,18 @@ const EditAppointmentModal = ({
 
         </div>
 
-        {/* FORM */}
+        {/* ==============================
+            FORM
+        ============================== */}
 
         <form
           onSubmit={handleSubmit}
           className="p-6 space-y-5"
         >
 
-          {/* PATIENT NAME */}
+          {/* ==============================
+              PATIENT NAME
+          ============================== */}
 
           <div>
             <label className="block font-semibold mb-2">
@@ -204,7 +250,9 @@ const EditAppointmentModal = ({
             />
           </div>
 
-          {/* PHONE */}
+          {/* ==============================
+              PHONE
+          ============================== */}
 
           <div>
             <label className="block font-semibold mb-2">
@@ -223,7 +271,30 @@ const EditAppointmentModal = ({
             />
           </div>
 
-          {/* DOCTOR */}
+          {/* ==============================
+              EMAIL
+          ============================== */}
+
+          <div>
+            <label className="block font-semibold mb-2">
+              Email
+            </label>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              placeholder="Enter patient email"
+              className="w-full border rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* ==============================
+              DOCTOR
+          ============================== */}
 
           <div>
             <label className="block font-semibold mb-2">
@@ -270,7 +341,9 @@ const EditAppointmentModal = ({
             </select>
           </div>
 
-          {/* SERVICE */}
+          {/* ==============================
+              SERVICE
+          ============================== */}
 
           <div>
             <label className="block font-semibold mb-2">
@@ -312,7 +385,9 @@ const EditAppointmentModal = ({
             </select>
           </div>
 
-          {/* DATE */}
+          {/* ==============================
+              DATE
+          ============================== */}
 
           <div>
             <label className="block font-semibold mb-2">
@@ -348,7 +423,9 @@ const EditAppointmentModal = ({
             </div>
           </div>
 
-          {/* AVAILABLE TIMES */}
+          {/* ==============================
+              AVAILABLE TIMES
+          ============================== */}
 
           {doctorId && date && (
             <div>
@@ -423,7 +500,9 @@ const EditAppointmentModal = ({
             </div>
           )}
 
-          {/* BUTTONS */}
+          {/* ==============================
+              BUTTONS
+          ============================== */}
 
           <div className="flex justify-end gap-3 pt-5 border-t">
 

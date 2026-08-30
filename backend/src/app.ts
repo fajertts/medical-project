@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import adminRoutes from "./routes/adminRoutes";
@@ -6,6 +7,7 @@ import serviceRoutes from "./routes/serviceRoute";
 import appointmentRoutes from "./routes/appointmentRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
 import path from "path";
+
 
 const app = express();
 

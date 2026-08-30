@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import {
   getAllDoctors,
+  getDoctorByIdService,
   createDoctor,
   updateDoctorById,
   deleteDoctorById,
@@ -18,6 +19,32 @@ export const getDoctors = async (req: Request, res: Response) => {
 
     res.status(500).json({
       message: "Internal Server Error",
+    });
+  }
+};
+
+// GET DOCTOR BY ID
+export const getDoctor = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const doctor = await getDoctorByIdService(Number(id));
+
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Doctor Not Found",
+      });
+    }
+
+    res.status(200).json(doctor);
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
     });
   }
 };

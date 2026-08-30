@@ -17,12 +17,12 @@ import AppointmentForm from "./components/appointments/AppointmentForm";
 
 import AdminLogin from "./pages/AdminLogin";
 
-import Dashboard from "./pages/Dashboard/DashboardServices";
 import DashboardHome from "./pages/Dashboard/DashboardHome";
 import DashboardDoctors from "./pages/Dashboard/DashboardDoctors";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardServices from "./pages/Dashboard/DashboardServices";
 import DashboardAppointments from "./pages/Dashboard/DashboardAppointments";
+import DoctorProfile from "./pages/DoctorProfile";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -37,6 +37,7 @@ const router = createBrowserRouter(
         <Route path="doctors" element={<DoctorsSection />} />
         <Route path="contact" element={<Contact />} />
         <Route path="appointment" element={<AppointmentForm />} />
+        <Route path="doctors/:id" element={<DoctorProfile />} />
       </Route>
 
       {/* لوحة التحكم */}

@@ -6,6 +6,25 @@ export const getAllDoctors = async () => {
   return result.rows;
 };
 
+export const getDoctorByIdService = async (
+  id: number
+) => {
+  const result = await pool.query(
+    `
+    SELECT
+      id,
+      name,
+      specialization,
+      image
+    FROM doctors
+    WHERE id = $1
+    `,
+    [id]
+  );
+
+  return result.rows[0];
+};
+
 // CREATE DOCTOR
 export const createDoctor = async (
   name: string,

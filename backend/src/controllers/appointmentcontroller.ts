@@ -19,19 +19,20 @@ export const addAppointment = async (
   try {
 
     const {
-      patient_name,
-      phone,
-      doctor_id,
-      service_id,
-      appointment_date,
-      appointment_time,
-    } = req.body;
-
+  patient_name,
+  phone,
+  email,
+  doctor_id,
+  service_id,
+  appointment_date,
+  appointment_time,
+} = req.body;
 
     const appointment =
       await createAppointment(
         patient_name,
         phone,
+        email,
         Number(doctor_id),
         Number(service_id),
         appointment_date,
@@ -146,6 +147,7 @@ export const updateAppointment = async (
 
     const {
       patient_name,
+      email,
       phone,
       doctor_id,
       service_id,
@@ -159,6 +161,7 @@ export const updateAppointment = async (
         Number(id),
         patient_name,
         phone,
+        email,
         Number(doctor_id),
         Number(service_id),
         appointment_date,

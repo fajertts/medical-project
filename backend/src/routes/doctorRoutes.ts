@@ -2,34 +2,22 @@ import { Router } from "express";
 
 import {
   getDoctors,
+  getDoctor,
   addDoctor,
   updateDoctor,
   deleteDoctor,
 } from "../controllers/doctorcontroller";
 
-import { verifyToken } from "../middleware/authMiddleWare";
-import { upload,} from "../middleware/upload";
-
 const router = Router();
 
-// الجميع يستطيع مشاهدة الأطباء
 router.get("/", getDoctors);
 
-// الأدمن فقط
-router.post(
-  "/",
-  verifyToken,
-  upload.single("image"),
-  addDoctor
-);
+router.get("/:id", getDoctor);
 
-router.put(
-  "/:id",
-  verifyToken,
-  upload.single("image"),
-  updateDoctor
-);
+router.post("/", addDoctor);
 
-router.delete("/:id", verifyToken, deleteDoctor);
+router.put("/:id", updateDoctor);
+
+router.delete("/:id", deleteDoctor);
 
 export default router;
